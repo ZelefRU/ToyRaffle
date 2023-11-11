@@ -6,7 +6,11 @@ import org.example.Model.Toy;
 import java.util.List;
 import java.util.Scanner;
 
+import static org.example.Model.Prizes.addPrize;
+import static org.example.Model.Prizes.viewPrizes;
+
 public class ActionMenu {
+    // Набор цветов для форматирования
     private static final String RESET = "\u001B[0;1m";
     private static final String BLACK = "\u001B[30;1m";
     private static final String RED = "\u001B[31;1m";
@@ -20,6 +24,9 @@ public class ActionMenu {
     protected static boolean firstView = true;
     protected static boolean work = true;
 
+    /**
+     * Вывод меню действий
+     */
     public static void showMenu() {
         while (work) {
             if (firstView) {
@@ -41,10 +48,11 @@ public class ActionMenu {
                         PURPLE + "  6. Help!\n".toUpperCase() +
                         RED + "  0. Exit\n".toUpperCase());
             }
+            // Получаем выбор пользователя с проверкой на число
             int userChoose = numbersScanner(YELLOW + "\n[*] Input: ".toUpperCase(), "Number required!");
             if (userChoose == 0) {
                 work = false;
-            } else if (firstView && userChoose > 0 && userChoose < 7) {
+            } else if (userChoose > 0 && userChoose < 7) {
                 menuAction(userChoose);
             } else {
                 System.out.print(RED + "+-------------------+\n" +
@@ -55,27 +63,30 @@ public class ActionMenu {
         }
     }
 
+    /**
+     * Выводит справку по программе
+     */
     public static void showHelp() {
 
     }
 
-    public static void setFirstView(boolean firstView) {
-        ActionMenu.firstView = firstView;
-    }
-
-    public static void setWork(boolean work) {
-        ActionMenu.work = work;
-    }
-
+    /**
+     * Вывод игрушек в автомате
+     */
     public static void showToysInSlotMachine() {
         List<Toy> toys = Controller.getToysInSlotMachine();
-        System.out.println("+--------------------------+");
+        System.out.println("+---------------------------------------+");
         for (Toy toy : toys) {
-            System.out.printf("|   %-10s %-5s %-6s|%n", toy.getName(), toy.getCount(), toy.getChance());
+            System.out.printf("|   %-2s %-18s %-5s %-8s|%n", toy.getId(), toy.getName(), toy.getCount(), toy.getChance() + "%");
         }
-        System.out.println("+--------------------------+");
+        System.out.println("+---------------------------------------+");
     }
 
+    /**
+     * Действия меню
+     *
+     * @param userChoose Выбор пользователя
+     */
     public static void menuAction(int userChoose) {
         switch (userChoose) {
             case 1 -> {
@@ -84,6 +95,7 @@ public class ActionMenu {
                     setFirstView(false);
                     Controller.fillSlotMachineRandomToys();
                     showToysInSlotMachine();
+                    rollAction();
                 } else {
                     System.out.println("u already");
                 }
@@ -92,26 +104,37 @@ public class ActionMenu {
                 if (firstView) {
                     System.out.println("Start game first!");
                 } else {
-                    System.out.println("continuing game");
+//                    showToysInSlotMachine();
+                    rollAction();
                 }
             }
             case 3 -> {
                 if (firstView) {
                     System.out.println("Start game first!");
                 } else {
-                    System.out.println("show prizes");
+                    viewPrizes();
                 }
             }
             case 4 -> {
-                System.out.println("Show list");
+                showToysInSlotMachine();
             }
             case 5 -> {
-                System.out.println("change toys");
+                Controller.fillSlotMachineRandomToys();
+                showToysInSlotMachine();
             }
-            case 6 -> {showHelp();}
+            case 6 -> {
+                showHelp();
+            }
         }
     }
 
+    /**
+     * Получает от пользователя ввод и проверяет на то, является ли оно числом.
+     *
+     * @param requestMessage Сообщение запроса ввода
+     * @param failMessage    Сообщение верного ввода
+     * @return int
+     */
     public static int numbersScanner(String requestMessage, String failMessage) {
         Scanner scanner = new Scanner(System.in);
         int number = 0;
@@ -130,5 +153,23 @@ public class ActionMenu {
             }
         }
         return number;
+    }
+
+    // Запускает Ролл (прокрутку) колеса с призами
+    public static void rollAction() {
+
+        if (Controller.getToysTypeCount() < 3) {
+            System.out.println(RED + "+-------------------------------------------+\n" +
+                    "|             Too few toys left!            |\n" +
+                    "| ASK THE ADMINISTRATOR TO UPDATE THE TOYS  |\n" +
+                    "|             ** SLOT MACHINE **            |\n" +
+                    "+-------------------------------------------+");
+        } else {
+            addPrize(Controller.getNumberByChances());
+        }
+    }
+
+    public static void setFirstView(boolean firstView) {
+        ActionMenu.firstView = firstView;
     }
 }

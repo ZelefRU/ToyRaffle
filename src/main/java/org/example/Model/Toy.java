@@ -49,6 +49,7 @@ public class Toy {
 
     @Override
     public String toString() {
-        return String.format("ID - %s, Name - %s, Chance - %s%%", id, name, chance);
+//        return String.format("ID - %s, Name - %s, Chance - %s%%", id, name, chance);
+        return String.format("%-3s %-18s %-4s %-6s", id, name, count, chance);
     }
 }
