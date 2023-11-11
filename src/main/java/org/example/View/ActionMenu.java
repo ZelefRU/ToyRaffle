@@ -32,24 +32,25 @@ public class ActionMenu {
             if (firstView) {
                 System.out.print(BLUE + "Available actions:\n".toUpperCase() +
                         GREEN + "  1. Start Game!\n".toUpperCase() +
-                        WHITE + "  x. Continue Game!\n".toUpperCase() +
+                        WHITE + "  x. Roll\n".toUpperCase() +
                         WHITE + "  x. Show me my prizes\n".toUpperCase() +
-                        GREEN + "  4. View list of toys\n".toUpperCase() +
-                        GREEN + "  5. Ask the Administrator to update the toys\n".toUpperCase() +
+                        WHITE + "  x. View list of toys\n".toUpperCase() +
+                        WHITE + "  x. Ask the Administrator to update the toys\n".toUpperCase() +
                         PURPLE + "  6. Help!\n".toUpperCase() +
                         RED + "  0. Exit\n".toUpperCase());
             } else {
-                System.out.print(BLUE + "Available actions:\n".toUpperCase() +
-                        WHITE + "  x. Start Game!\n".toUpperCase() +
-                        GREEN + "  2. Continue Game!\n".toUpperCase() +
-                        GREEN + "  3. Show me my prizes\n".toUpperCase() +
-                        GREEN + "  4. View list of toys\n".toUpperCase() +
-                        GREEN + "  5. Ask the Administrator to update the toys\n".toUpperCase() +
-                        PURPLE + "  6. Help!\n".toUpperCase() +
-                        RED + "  0. Exit\n".toUpperCase());
+                showToysInSlotMachine();
+//                System.out.print(BLUE + "Available actions:\n".toUpperCase() +
+//                        WHITE + "  x. Start Game!\n".toUpperCase() +
+//                        GREEN + "  2. Roll\n".toUpperCase() +
+//                        GREEN + "  3. Show me my prizes\n".toUpperCase() +
+//                        GREEN + "  4. View list of toys\n".toUpperCase() +
+//                        GREEN + "  5. Ask the Administrator to update the toys\n".toUpperCase() +
+//                        PURPLE + "  6. Help!\n".toUpperCase() +
+//                        RED + "  0. Exit\n".toUpperCase());
             }
             // Получаем выбор пользователя с проверкой на число
-            int userChoose = numbersScanner(YELLOW + "\n[*] Input: ".toUpperCase(), "Number required!");
+            int userChoose = numbersScanner(YELLOW + "[*] Input: ".toUpperCase(), "Number required!");
             if (userChoose == 0) {
                 work = false;
             } else if (userChoose > 0 && userChoose < 7) {
@@ -75,11 +76,60 @@ public class ActionMenu {
      */
     public static void showToysInSlotMachine() {
         List<Toy> toys = Controller.getToysInSlotMachine();
-        System.out.println("+---------------------------------------+");
-        for (Toy toy : toys) {
-            System.out.printf("|   %-2s %-18s %-5s %-8s|%n", toy.getId(), toy.getName(), toy.getCount(), toy.getChance() + "%");
+        StringBuilder result = new StringBuilder(YELLOW + "+-----------------ITEMS----------------+" + BLUE + "        AVAILABLE ACTIONS:\n");
+        for (int i = 0; i < toys.size(); i++) {
+            result.append(YELLOW).append(String.format("|   %-2s %-18s %-5s %-8s|",
+                    toys.get(i).getId(), toys.get(i).getName(), toys.get(i).getCount(), toys.get(i).getChance() + "%"));
+            switch (i) {
+                case 0 -> result.append(WHITE).append("          x. START GAME!".toUpperCase());
+                case 1 -> result.append(GREEN).append("          2. ROLL".toUpperCase());
+                case 2 -> result.append(GREEN).append("          3. SHOW ME MY PRIZES".toUpperCase());
+                case 3 -> result.append(GREEN).append("          4. VIEW LIST OF TOYS".toUpperCase());
+                case 4 -> result.append(GREEN).append("          5. ASK THE ADMINISTRATOR TO UPDATE THE TOYS".toUpperCase());
+                case 5 -> result.append(PURPLE).append("          6. HELP!".toUpperCase());
+                case 7 -> result.append(RED).append("          0. EXIT".toUpperCase());
+            }
+            result.append("\n");
         }
-        System.out.println("+---------------------------------------+");
+        result.append(YELLOW).append("+---------------------------------------+");
+        switch (toys.size()) {
+            case 1 -> {
+                result.append(" ".repeat(10));
+                result.append(YELLOW).append("2. ROLL\n");
+                result.append(" ".repeat(51)).append(GREEN).append("3. SHOW ME MY PRIZES\n");
+                result.append(" ".repeat(51)).append(GREEN).append("4. VIEW LIST OF TOYS\n");
+                result.append(" ".repeat(51)).append(GREEN).append("5. ASK THE ADMINISTRATOR TO UPDATE THE TOYS\n");
+                result.append(" ".repeat(51)).append(PURPLE).append("6. HELP!\n");
+                result.append(" ".repeat(51)).append(RED).append("0. EXIT\n");
+            }
+            case 2 -> {
+                result.append(" ".repeat(10));
+                result.append(GREEN).append("3. SHOW ME MY PRIZES\n");
+                result.append(" ".repeat(51)).append(GREEN).append("4. VIEW LIST OF TOYS\n");
+                result.append(" ".repeat(51)).append(GREEN).append("5. ASK THE ADMINISTRATOR TO UPDATE THE TOYS\n");
+                result.append(" ".repeat(51)).append(PURPLE).append("6. HELP!\n");
+                result.append(" ".repeat(51)).append(RED).append("0. EXIT\n");
+            }
+            case 3 -> {
+                result.append(" ".repeat(10)).append(GREEN).append("4. VIEW LIST OF TOYS\n");
+                result.append(" ".repeat(51)).append(GREEN).append("5. ASK THE ADMINISTRATOR TO UPDATE THE TOYS\n");
+                result.append(" ".repeat(51)).append(PURPLE).append("6. HELP!\n");
+                result.append(" ".repeat(51)).append(RED).append("0. EXIT\n");
+            }
+            case 4 -> {
+                result.append(" ".repeat(10)).append(GREEN).append("5. ASK THE ADMINISTRATOR TO UPDATE THE TOYS\n");
+                result.append(" ".repeat(51)).append(PURPLE).append("6. HELP!\n");
+                result.append(" ".repeat(51)).append(RED).append("0. EXIT\n");
+            }
+            case 5 -> {
+                result.append(" ".repeat(10)).append(PURPLE).append("6. HELP!\n");
+                result.append(" ".repeat(51)).append(RED).append("0. EXIT\n");
+            }
+            case 6, 7 -> {
+                result.append(" ".repeat(10)).append(RED).append("0. EXIT\n");
+            }
+        }
+        System.out.println(result);
     }
 
     /**
@@ -91,13 +141,11 @@ public class ActionMenu {
         switch (userChoose) {
             case 1 -> {
                 if (firstView) {
-                    System.out.println("Start game!");
                     setFirstView(false);
                     Controller.fillSlotMachineRandomToys();
-                    showToysInSlotMachine();
-                    rollAction();
+//                    showToysInSlotMachine();
                 } else {
-                    System.out.println("u already");
+                    System.out.println("Already!");
                 }
             }
             case 2 -> {
@@ -116,11 +164,19 @@ public class ActionMenu {
                 }
             }
             case 4 -> {
-                showToysInSlotMachine();
+                if (firstView) {
+                    System.out.println("Start game first!");
+                } else {
+                    showToysInSlotMachine();
+                }
             }
             case 5 -> {
-                Controller.fillSlotMachineRandomToys();
-                showToysInSlotMachine();
+                if (firstView) {
+                    System.out.println("Start game first!");
+                } else {
+                    Controller.fillSlotMachineRandomToys();
+                    showToysInSlotMachine();
+                }
             }
             case 6 -> {
                 showHelp();
