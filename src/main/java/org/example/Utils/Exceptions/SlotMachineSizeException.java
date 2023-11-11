@@ -1,4 +1,4 @@
-package org.example.Exceptions;
+package org.example.Utils.Exceptions;
 
 public class SlotMachineSizeException extends Exception {
 

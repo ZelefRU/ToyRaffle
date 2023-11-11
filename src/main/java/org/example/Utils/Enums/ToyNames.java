@@ -1,4 +1,4 @@
-package org.example.Model.Enums;
+package org.example.Utils.Enums;
 
 public enum ToyNames {
     Doll,

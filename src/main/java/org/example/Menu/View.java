@@ -25,6 +25,11 @@ public class View {
     public static void setFirstView(boolean firstView) {
         View.firstView = firstView;
     }
+
+    public static void setWork(boolean work) {
+        View.work = work;
+    }
+
     /**
      * Вывод меню действий
      */
@@ -40,7 +45,7 @@ public class View {
                         WHITE + "  x. Collect your prizes and leave!\n".toUpperCase() +
                         RED + "  0. Exit\n".toUpperCase());
             } else {
-                showSplitMenuWithToysPannel();
+                showSplitMenuWithToysPanel();
             }
             // Получаем выбор пользователя с проверкой на число
             int userChoose = numbersScanner(PURPLE + "[*] Input: ".toUpperCase(), "Number required!");
@@ -49,83 +54,68 @@ public class View {
             } else if (userChoose > 0 && userChoose < 7) {
                 menuAction(userChoose);
             } else {
-                System.out.print(RED + "+-------------------+\n" +
-                        "|   Wrong Action!   |\n" +
-                        "|     Try again.    |\n" +
-                        "+-------------------+\n");
+                System.out.print(RED +
+                        "+---------------------------------------+\n" +
+                        "|             Wrong Action!             |\n" +
+                        "|               Try again               |\n" +
+                        "+---------------------------------------+\n");
             }
         }
     }
 
 
     /**
-     * Вывод игрушек в автомате
+     * Вывод меню совместно с содержимым автомата. Сделано исключительно для удобства навигации.
      */
-    public static void showSplitMenuWithToysPannel() {
+    public static void showSplitMenuWithToysPanel() {
         List<Toy> toys = Controller.getToysInSlotMachine();
-        StringBuilder result = new StringBuilder(YELLOW + "+-----------------ITEMS-----------------+" + BLUE + "        AVAILABLE ACTIONS:\n");
-        String[] actions = {WHITE +"x. START GAME!",
-                GREEN +"2. ROLL",
-                GREEN +"3. SHOW ME MY PRIZES",
-                GREEN +"4. VIEW LIST OF TOYS",
-                GREEN +"5. ASK THE MANAGER TO UPDATE THE TOYS",
-                CYAN +"6. COLLECT YOUR PRIZES AND LEAVE!",
-                RED +"0. EXIT"};
+        StringBuilder result = new StringBuilder();
+        int toySize = toys.size();
 
-        for (int i = 0; i < toys.size(); i++) {
-            result.append(YELLOW).append(String.format("|   %-2s %-18s %-5s %-8s|",
+        // Список с действиями меню
+        String[] actions = {WHITE + "x. START GAME!",
+                GREEN + "2. ROLL",
+                GREEN + "3. SHOW ME MY PRIZES",
+                GREEN + "4. VIEW LIST OF TOYS",
+                GREEN + "5. ASK THE MANAGER TO UPDATE THE TOYS",
+                CYAN + "6. COLLECT YOUR PRIZES AND LEAVE!",
+                RED + "0. EXIT"};
+
+        result.append(YELLOW).append("+-----------------ITEMS-----------------+");
+        result.append(BLUE).append(space(8)).append("AVAILABLE ACTIONS:\n");
+
+        // Цикл добавления игрушек в StringBuilder для вывода
+        for (int i = 0; i < toySize; i++) {
+            result.append(YELLOW);
+            result.append(String.format("|   %-2s %-18s %-5s %-8s|",
                     toys.get(i).getId(), toys.get(i).getName(), toys.get(i).getCount(), toys.get(i).getChance() + "%"));
-            switch (i) {
-                case 0 -> result.append(space(10)).append(actions[0]);
-                case 1 -> result.append(space(10)).append(actions[1]);
-                case 2 -> result.append(space(10)).append(actions[2]);
-                case 3 -> result.append(space(10)).append(actions[3]);
-                case 4 -> result.append(space(10)).append(actions[4]);
-                case 5 -> result.append(space(10)).append(actions[5]);
-                case 7 -> result.append(space(10)).append(actions[6]);
+
+            // Условие для добавления пунктов меню с правой стороны
+            if (i < 7) {
+                result.append(space(10)).append(actions[i]).append("\n");
+            } else {
+                result.append("\n");
             }
-            result.append("\n");
         }
         result.append(YELLOW).append("+---------------------------------------+");
-        // Я знаю что тут дичь какая-то, главное что работает! А запариваться над красивым кодом здесь мне было уже лень
-        switch (toys.size()) {
-            case 1 -> {
-                result.append(space(10)).append(actions[1]).append("\n");
-                result.append(space(51)).append(actions[2]).append("\n");
-                result.append(space(51)).append(actions[3]).append("\n");
-                result.append(space(51)).append(actions[4]).append("\n");
-                result.append(space(51)).append(actions[5]).append("\n");
-                result.append(space(51)).append(actions[6]).append("\n");
-            }
-            case 2 -> {
-                result.append(space(10)).append(actions[2]).append("\n");;
-                result.append(space(51)).append(actions[3]).append("\n");;
-                result.append(space(51)).append(actions[4]).append("\n");;
-                result.append(space(51)).append(actions[5]).append("\n");;
-                result.append(space(51)).append(actions[6]).append("\n");;
-            }
-            case 3 -> {
-                result.append(space(10)).append(actions[3]).append("\n");;
-                result.append(space(51)).append(actions[4]).append("\n");;
-                result.append(space(51)).append(actions[5]).append("\n");;
-                result.append(space(51)).append(actions[6]).append("\n");;
-            }
-            case 4 -> {
-                result.append(space(10)).append(actions[4]).append("\n");;
-                result.append(space(51)).append(actions[5]).append("\n");;
-                result.append(space(51)).append(actions[6]).append("\n");;
-            }
-            case 5 -> {
-                result.append(space(10)).append(actions[5]).append("\n");;
-                result.append(space(51)).append(actions[6]).append("\n");;
-            }
-            case 6, 7 -> {
-                result.append(space(10)).append(actions[6]).append("\n");;
+
+        // Условие, которое срабатывает если в Автомате меньше 7 типов игрушек.
+        // Необходимо для выравнивания текста по условной левой границе текста меню.
+        if (toySize > 0 && toySize < 7) {
+            result.append(space(10)).append(actions[toySize]).append("\n");
+            for (int i = toySize + 1; i < actions.length; i++) {
+                result.append(space(51)).append(actions[i]).append("\n");
             }
         }
         System.out.println(result);
     }
 
+    /**
+     * Просто потому что мне лень
+     *
+     * @param count Число пробелов
+     * @return String
+     */
     public static String space(int count) {
         return " ".repeat(count);
     }

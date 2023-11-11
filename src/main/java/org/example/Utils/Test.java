@@ -1,13 +1,10 @@
-package org.example;
+package org.example.Utils;
 
 import org.example.Model.SlotMachine;
 import org.example.Model.Toy;
 
-import javax.swing.*;
+import static org.example.Utils.AutoGenerate.*;
 
-import static org.example.Model.AutoGenerate.*;
-
-import java.nio.DoubleBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

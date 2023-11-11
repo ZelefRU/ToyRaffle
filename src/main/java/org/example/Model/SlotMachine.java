@@ -1,6 +1,6 @@
 package org.example.Model;
 
-import org.example.Exceptions.SlotMachineSizeException;
+import org.example.Utils.Exceptions.SlotMachineSizeException;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ public class SlotMachine {
     private int totalToysCount;
 
     public SlotMachine() {}
+
     public SlotMachine(List<Toy> toys, int capacity) throws SlotMachineSizeException {
         int totalToysCount = 0;
         for (Toy toy : toys) {
@@ -34,18 +35,6 @@ public class SlotMachine {
     public void setToys(List<Toy> toys) {
         this.toys = toys;
         updateTotalToysCount();
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
-    public int getTotalToysCount() {
-        return totalToysCount;
     }
 
     public void addToy(Toy toy) {
@@ -74,6 +63,11 @@ public class SlotMachine {
         totalToysCount = tempCount;
     }
 
+    /**
+     * Удаление игрушки из автомата
+     * @param toy Игрушка
+     * @param count Количество
+     */
     public void removeToy(Toy toy, int count) {
         // Если игрушка есть в автомате
         if (toys.contains(toy)) {

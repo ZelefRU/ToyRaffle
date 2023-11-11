@@ -12,6 +12,10 @@ public class Prizes {
         prizesList = new LinkedList<>();
     }
 
+    /**
+     * Добавление игрушки в список призов
+     * @param toy Игрушка
+     */
     public static void addPrize(Toy toy) {
         if (prizesList == null) {
             initializePrizesList();

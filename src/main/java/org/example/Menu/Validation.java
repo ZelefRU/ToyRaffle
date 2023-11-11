@@ -1,5 +1,6 @@
 package org.example.Menu;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import static org.example.Menu.View.RED;
@@ -16,21 +17,14 @@ public class Validation {
      */
     public static int numbersScanner(String requestMessage, String failMessage) {
         Scanner scanner = new Scanner(System.in);
-        int number = 0;
-        boolean validNumber = false;
-        while (!validNumber) {
+        while (true) {
             try {
                 System.out.print(YELLOW + requestMessage);
-                number = scanner.nextInt();
-                if (number < 0) {
-                    number *= -1;
-                } // Преобразуем отрицательное в положительное
-                validNumber = true;
-            } catch (Exception e) {
+                return  Math.abs(scanner.nextInt());
+            } catch (InputMismatchException e) {
                 System.out.println(RED + failMessage);
                 scanner.nextLine();
             }
         }
-        return number;
     }
 }

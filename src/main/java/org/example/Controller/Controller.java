@@ -7,38 +7,60 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static org.example.Model.AutoGenerate.*;
+import static org.example.Utils.AutoGenerate.*;
 
 public class Controller {
     protected static int defaultCapacity = 40;
     protected static SlotMachine slotMachine = new SlotMachine();
 
 
-    public static int getToysCount() {
-        return slotMachine.getTotalToysCount();
-    }
-
+    /**
+     * Возвращает кол-во Типов игрушек
+     * @return int
+     */
     public static int getToysTypeCount() {
         return slotMachine.getToys().size();
     }
 
+    /**
+     * Заполняет автомат случайными игрушками со значениями по умолчанию
+     */
+    // TODO: 11/12/2023 Добавить возможность установки менеджером собственных значений.
     public static void fillSlotMachineRandomToys() {
         List<Toy> toyList = getListRandomToys(12, defaultCapacity, 10, true);
         slotMachine.setToys(toyList);
     }
 
+    /**
+     * Возвращает игрушки из игрового автомата
+     * @return {@code List<Toy>}
+     */
     public static List<Toy> getToysInSlotMachine() {
         return slotMachine.getToys();
     }
 
-    public static Toy getNumberByChances() {
+    /**
+     * Возвращает игрушку с учётом шанса выпадения.
+     * @return Toy
+     */
+    public static Toy getToyByChance() {
         List<Toy> toys = slotMachine.getToys();
         List<Integer> chancesInIntegers = new ArrayList<>();
         for (Toy toy : toys) {
             chancesInIntegers.add((int) (toy.getChance() * 10));
         }
 
-        List<Integer> chances = new ArrayList<>();
+        /*
+        Использовал свою идею для получения игрушки с учётом шанса.
+        Создаётся ArrayList и заполняется значениями ID то кол-во раз,
+        которое указано в шансе, т.е., если шанс 12.9, то в ArrayList
+        будет 129 раз добавлено ID, и так по каждой игрушке. Затем
+        random выбирает случайное число из всего этого списка, тем самым,
+        у тех ID что повторяются чаще больше шансов, за счёт чего и работает
+        система с учётом шанса выпадения. Мне было немного лень придумывать
+        что-то более красивое и оптимизированное в рамках этой программы.
+         */
+        ArrayList<Integer> chances = new ArrayList<>();
         int tempId = 0;
         for (Integer integer : chancesInIntegers) {
             for (int i = 0; i < integer; i++) {
@@ -53,16 +75,7 @@ public class Controller {
             e.printStackTrace();
         }
 
-//        System.out.println("PrizeId " + prizeId);
-//        System.out.println("Toys size - " + toys.size());
-//        System.out.println("Chance size - " + chances.size());
-//
-//        for (Integer integer : chances) {
-//            System.out.print(integer);
-//        }
-//        System.out.println();
-        Toy toy = toys.get(prizeId);
         slotMachine.removeToy(toys.get(prizeId), 1);
-        return toy;
+        return toys.get(prizeId);
     }
 }

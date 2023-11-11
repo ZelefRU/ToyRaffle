@@ -1,10 +1,10 @@
-package org.example.Model;
+package org.example.Utils;
 
-import org.example.Model.Enums.ToyNames;
+import org.example.Utils.Enums.ToyNames;
+import org.example.Model.Toy;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
