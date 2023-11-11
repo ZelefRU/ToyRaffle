@@ -84,10 +84,10 @@ public class SlotMachine {
                 Toy tempToy = toys.get(toys.indexOf(toy));
                 tempToy.setCount(tempToy.getCount() - count);
                 toys.set(toys.indexOf(toy), tempToy);
-                System.out.printf("Toy %s with ID %s has been removed. The are left %s toys in the machine\n",
+                System.out.printf("\n[-] Toy %s with ID %s has been removed. The are left %s toys in the machine\n",
                         toy.getName(), toy.getId(), tempToy.getCount());
             } else if (toyCount == count) {
-                System.out.printf("Toy %s with ID %s has been removed. \n", toy.getName(), toy.getId());
+                System.out.printf("\n[-] Toy %s with ID %s has been removed. \n", toy.getName(), toy.getId());
                 toys.remove(toy);
             } else {
                 System.out.println("Too much!");

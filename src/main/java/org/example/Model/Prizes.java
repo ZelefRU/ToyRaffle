@@ -1,7 +1,9 @@
 package org.example.Model;
 
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Prizes {
     private static Deque<Toy> prizesList;
@@ -16,12 +18,12 @@ public class Prizes {
         }
         Toy newPrizeToy = new Toy(1, toy.getChance(), toy.getName());
         prizesList.add(newPrizeToy);
-        System.out.printf("Toy %s x%s has been added in Prizes\n", newPrizeToy.getName(), newPrizeToy.getCount());
+        System.out.printf("[+] Toy %s x%s has been added in Prizes\n", newPrizeToy.getName(), newPrizeToy.getCount());
     }
 
     public static void removePrize() {
         if (prizesList == null || prizesList.isEmpty()) {
-            System.out.println("No prizes available.");
+            System.out.println("[x] No prizes available.");
             return;
         }
 
@@ -30,9 +32,7 @@ public class Prizes {
         System.out.printf("%-8s x%-4s was issued!", tempToy.getName(), tempToy.getCount());
     }
 
-    public static void viewPrizes() {
-        for (Toy toy : prizesList) {
-            System.out.println(toy);
-        }
+    public static List<Toy> getPrizes() {
+        return new ArrayList<>(prizesList);
     }
 }

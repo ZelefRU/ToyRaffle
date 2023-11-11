@@ -10,7 +10,7 @@ import java.util.Random;
 import static org.example.Model.AutoGenerate.*;
 
 public class Controller {
-    protected static int defaultCapacity = 30;
+    protected static int defaultCapacity = 40;
     protected static SlotMachine slotMachine = new SlotMachine();
 
 
@@ -23,7 +23,7 @@ public class Controller {
     }
 
     public static void fillSlotMachineRandomToys() {
-        List<Toy> toyList = getListRandomToys(8, defaultCapacity, 10, true);
+        List<Toy> toyList = getListRandomToys(12, defaultCapacity, 10, true);
         slotMachine.setToys(toyList);
     }
 
